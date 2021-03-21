@@ -1,9 +1,9 @@
 [Unit]
-Description=shuwa_td_service
+Description=dgiot_td_server
 
 [Service]
 Type=simple
-ExecStart=/usr/sbin/shuwa_td 127.0.0.1 root taosd
+ExecStart=/usr/sbin/dgiot_td_server 127.0.0.1 root taosd
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=mixed
 KillSignal=SIGINT
