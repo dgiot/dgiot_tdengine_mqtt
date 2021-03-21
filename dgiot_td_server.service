@@ -1,0 +1,15 @@
+[Unit]
+Description=shuwa_td_service
+
+[Service]
+Type=simple
+ExecStart=/usr/sbin/shuwa_td 127.0.0.1 root taosd
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=mixed
+KillSignal=SIGINT
+TimeoutSec=300
+OOMScoreAdjust=-1000
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
