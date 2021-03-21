@@ -11,7 +11,7 @@
 # 功能
  - 支持开机自启动与桥接服务进程守护
  - 通过数蛙平台的设备档案管理,可以支持亿级tdengine数据节点的读写
-   | 设备层  | 数蛙平台  | 数据桥接  |  数据存储 |
+   | 设备层 --> | 数蛙平台 -->  | 数据桥接 -->  |  数据存储 |
    | ------------ | ------------ | ------------ | ------------ |
    |  千万设备 | dgiot server  | dgiot_td_server  |tdengine server   |
    |  千万设备 | dgiot server  | dgiot_td_server  |tdengine server   |
