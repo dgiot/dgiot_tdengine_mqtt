@@ -74,11 +74,11 @@ int on_message(struct mosquitto *mosq, void *userdata, const struct mosquitto_me
         }
     }
 	if(strcmp(msg->topic, (const char *)(((struct userdata_td *)userdata)->sql)) == 0){
-        if (taos_query(taos, msg->payload)) {
-            char ack[128];
-            snprintf(ack, 128, "reason:%s\n", taos_errstr(taos));
-            mosquitto_publish(mosq, NULL, (const char *)(((struct userdata_td *)userdata)->ack), (int)strlen(ack)+1, ack, 0, 0);
-        }
+            if (taos_query(taos, msg->payload)) {
+                char ack[128];
+                snprintf(ack, 128, "reason:%s\n", taos_errstr(taos));
+                mosquitto_publish(mosq, NULL, (const char *)(((struct userdata_td *)userdata)->ack), (int)strlen(ack)+1, ack, 0, 0);
+            }
     }else if(strcmp(msg->topic, (const char *)(((struct userdata_td *)userdata)->connect)) == 0){
         taos_close(taos);
         taos = taos_connect((const char *)(((struct userdata_td *)userdata)->tdhost), "root", msg->payload, NULL, 0);
