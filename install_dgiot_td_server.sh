@@ -6,7 +6,7 @@ echo  $workdir
 
 #setup mosquitto
 rm mosquitto* -rf
-wget http://ci.iotn2n.com/shuwa/oem/mosquitto-1.6.7.tar.gz -O /tmp/mosquitto-1.6.7.tar.gz
+wget http://dgiot-1253666439.cos.ap-shanghai-fsi.myqcloud.com/dgiot_release/v4.4.0/mosquitto-1.6.7.tar.gz -O /tmp/mosquitto-1.6.7.tar.gz
 cd /tmp
 tar xvf mosquitto-1.6.7.tar.gz
 cd  mosquitto-1.6.7
@@ -19,22 +19,14 @@ cd ..
 rm mosquitto*  -rf
 
 #setup tdengine server
-wget http://ci.iotn2n.com/shuwa/oem/TDengine-server-2.0.16.0-Linux-x64.tar.gz -O /tmp/TDengine-server-2.0.16.0-Linux-x64.tar.gz
+wget http://dgiot-1253666439.cos.ap-shanghai-fsi.myqcloud.com/dgiot_release/v4.4.0/TDengine-server-2.0.20.13.tar.gz -O /tmp/TDengine-server-2.0.20.13.tar.gz
 cd /tmp
-tar xf TDengine-server-2.0.16.0-Linux-x64.tar.gz
-cd /tmp/TDengine-server-2.0.16.0-Linux-x64.tar.gz
+tar xf TDengine-server-2.0.20.13.tar.gz
+cd /tmp/TDengine-server-2.0.20.13
 /bin/sh install.sh.sh
 ldconfig
-rm /tmp/TDengine-server-2.0.16.0-Linux-x64 -rf
+rm /tmp/TDengine-server-2.0.20.13 -rf
 
-#setup tdengine client
-wget http://ci.iotn2n.com/shuwa/oem/TDengine-client-2.0.16.0-Linux-x64.tar.gz -O /tmp/TDengine-client-2.0.16.0-Linux-x64.tar.gz
-cd /tmp
-tar xf TDengine-client-2.0.16.0-Linux-x64.tar.gz
-cd /tmp/TDengine-client-2.0.16.0-Linux-x64
-/bin/sh install_client.sh
-ldconfig
-rm /tmp/TDengine-client-2.0.16.0-Linux-x64 -rf
 
 #编译dgiot_td_server桥接服务
 cd $workdir/c
@@ -49,7 +41,7 @@ Description=dgiot_td_server
 
 [Service]
 Type=simple
-ExecStart=/usr/sbin/dgiot_td_server 127.0.0.1 taosd root
+ExecStart=/usr/sbin/dgiot_td_server 127.0.0.1
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=mixed
 KillSignal=SIGINT
