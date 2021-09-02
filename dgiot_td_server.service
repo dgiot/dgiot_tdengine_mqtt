@@ -3,7 +3,7 @@ Description=dgiot_td_server
 
 [Service]
 Type=simple
-ExecStart=/usr/sbin/dgiot_td_server 127.0.0.1 root taosd
+ExecStart=/usr/sbin/dgiot_td_server 127.0.0.1
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=mixed
 KillSignal=SIGINT
