@@ -69,14 +69,15 @@ int on_message(struct mosquitto *mosq, void *userdata, const struct mosquitto_me
     if(strcmp(msg->topic, (const char *)(((struct userdata_td *)userdata)->debug)) == 0){
         if (taos_query(taos, msg->payload)) {
             char ack[128];
-            snprintf(ack, 128, "reason:%s\n", taos_errstr(taos));
+            snprintf(ack, 128, "%s\n", taos_errstr(taos));
             mosquitto_publish(mosq, NULL, (const char *)(((struct userdata_td *)userdata)->ack), (int)strlen(ack)+1, ack, 0, 0);
         }
     }
-	if(strcmp(msg->topic, (const char *)(((struct userdata_td *)userdata)->sql)) == 0){
+   
+   if(strcmp(msg->topic, (const char *)(((struct userdata_td *)userdata)->sql)) == 0){
             if (taos_query(taos, msg->payload)) {
                 char ack[128];
-                snprintf(ack, 128, "reason:%s\n", taos_errstr(taos));
+                snprintf(ack, 128, "%s\n", taos_errstr(taos));
                 mosquitto_publish(mosq, NULL, (const char *)(((struct userdata_td *)userdata)->ack), (int)strlen(ack)+1, ack, 0, 0);
             }
     }else if(strcmp(msg->topic, (const char *)(((struct userdata_td *)userdata)->connect)) == 0){
@@ -90,6 +91,7 @@ int on_message(struct mosquitto *mosq, void *userdata, const struct mosquitto_me
             snprintf(ack, 64, "connect success username:root password:%s\n", msg->payload);
             mosquitto_publish(mosq, NULL, (const char *)(((struct userdata_td *)userdata)->ack), (int)strlen(ack)+1, ack, 0, 0);
         }
+        printf("%s",ack);
     }
 	return 0;
 }
@@ -98,34 +100,33 @@ int main(int argc, char *argv[])
 {
    int rc;
    struct userdata_td userdata;
-   char mqttserver[64], ChannelId[64], ProductId[64], sub_topic[64], cliend_id[32];
-
+   char mqttserver[64], sub_topic[64], cliend_id[32];
+   char username[64],password[64];
    snprintf(userdata.tdhost, 128, "127.0.0.1");
+   strcpy(username, "taos");
+   strcpy(password, "taosdata");
    if ( argc == 1 ) {
-       printf("usage: %s mqttserver ChannelId ProductId tdhost \n", argv[0]);
+       printf("usage: %s mqttserver  \n", argv[0]);
        exit(0);
    }
     if ( argc >= 1 ) strcpy(mqttserver, argv[1]);
-    if ( argc >= 2 ) strcpy(ChannelId, argv[2]);
-    if ( argc >= 3 ) strcpy(ProductId, argv[3]);
-    if ( argc >= 4 ) snprintf(userdata.tdhost, 128, argv[4]);
     // init TAOS
     taos_init();
     mosquitto_lib_init();
 
-    snprintf(cliend_id, 32, "swtd_%s%s", ProductId, get_key());
-    snprintf(sub_topic, 64, "%s/#",cliend_id);
-    snprintf(userdata.ack, 64, "%s/%s", cliend_id, ChannelId);
-    snprintf(userdata.sql, 64, "%s/sql", cliend_id);
-    snprintf(userdata.debug, 64, "%s/debug", cliend_id);
-    snprintf(userdata.connect, 64, "%s/connect", cliend_id);
+    snprintf(cliend_id, 32, "%s", get_key());
+    snprintf(sub_topic, 64, "tdpool/%s/#",cliend_id);
+    snprintf(userdata.ack, 64, "dgiot/%s", cliend_id);
+    snprintf(userdata.sql, 64, "tdpool/%s/sql", cliend_id);
+    snprintf(userdata.debug, 64, "tdpool/%s/debug", cliend_id);
+    snprintf(userdata.connect, 64, "tdpool/%s/connect", cliend_id);
 
     rc = mosquitto_subscribe_callback(
         on_message, &userdata,
         sub_topic, 0,
         mqttserver, 1883,
         cliend_id, 60, true,
-        ChannelId, ProductId,
+        username, password,
         NULL, NULL);
 
      if(rc){
