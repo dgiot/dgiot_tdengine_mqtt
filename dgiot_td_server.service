@@ -1,9 +1,9 @@
 [Unit]
-Description=dgiot_td_server
+Description=dgiot_tdengine_mqtt
 
 [Service]
 Type=simple
-ExecStart=/usr/sbin/dgiot_td_server 127.0.0.1
+ExecStart=/usr/sbin/dgiot_tdengine_mqtt 127.0.0.1
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=mixed
 KillSignal=SIGINT

@@ -22,9 +22,9 @@ CFLAGS = -O3 -g -Wall -Wno-deprecated -fPIC -Wno-unused-result -Wconversion -Wno
 all: $(TARGET)
 
 exe:
-	gcc $(CFLAGS) ./dgiot_td_server.c -o $(ROOT)/dgiot_td_server $(LFLAGS)
+	gcc $(CFLAGS) ./dgiot_tdengine_mqtt.c -o $(ROOT)/dgiot_tdengine_mqtt $(LFLAGS)
 
 clean:
-	rm $(ROOT)dgiot_td_server
+	rm $(ROOT)dgiot_tdengine_mqtt
 
 
